@@ -1,6 +1,6 @@
 # Rodric GT3 — Porsche 3D
 
-Sitio estático para GitHub Pages. Conserva las cuatro secciones, colores, tipografías, navegación fija y transiciones 3D del ejemplo `3D Realistic Bee`. El Porsche cambia de encuadre al desplazarse. No requiere React, npm, backend ni compilación.
+Sitio estático para GitHub Pages. Conserva las cuatro secciones, tipografías y navegación fija del ejemplo `3D Realistic Bee`. La paleta combina blanco, grafito y rojo con el Porsche. El giro, la inclinación y el encuadre avanzan de forma continua con el desplazamiento; retroceden al subir. No requiere React, npm, backend ni compilación.
 
 ## Publicar paso a paso
 
@@ -23,7 +23,7 @@ Sitio estático para GitHub Pages. Conserva las cuatro secciones, colores, tipog
 Archivos:
 - `index.html`: títulos, párrafos, redes y contacto.
 - `style.css`: diseño original y ajustes al final. Los colores están en `:root`.
-- `script.js`: escena y cuatro vistas en `views`. `angle` gira el auto, `scale` cambia su tamaño y `x`/`y` su posición.
+- `script.js`: escena y cuatro vistas en `views`. `angle` gira el auto, `pitch` ajusta la inclinación, `scale` cambia su tamaño y `x`/`y` su posición.
 - `assets/porsche_gt3_rs.glb`: modelo local de aproximadamente 18.4 MB.
 - `assets/vendor/`: Three.js 0.160.1 y cargador locales.
 - `.nojekyll`: permite servir directamente los archivos estáticos.

@@ -21,7 +21,7 @@ const environment = pmrem.fromScene(room, 0.04);
 scene.environment = environment.texture;
 room.dispose();
 pmrem.dispose();
-scene.add(new THREE.HemisphereLight(0xffffff, 0x686e52, 2));
+scene.add(new THREE.HemisphereLight(0xffffff, 0x555963, 2));
 const key = new THREE.DirectionalLight(0xffffff, 3);
 key.position.set(4, 6, 8);
 scene.add(key);
@@ -31,29 +31,37 @@ scene.add(rig);
 let loaded = false;
 let frame = 0;
 let lastTime = 0;
-const target = { x: 0, y: 0, angle: -0.65, scale: 1 };
+const target = { x: 0, y: 0, angle: -0.65, pitch: 0.12, scale: 1 };
 const views = [
-  { x: 0, y: -0.20, angle: -0.65, scale: 1.12 },
-  { x: -0.27, y: -0.10, angle: 0.85, scale: 0.78 },
-  { x: 0.28, y: -0.12, angle: 2.35, scale: 0.76 },
-  { x: 0, y: -0.35, angle: 3.85, scale: 0.62 },
+  { x: 0, y: -0.20, angle: -0.65, pitch: 0.12, scale: 1.12 },
+  { x: -0.27, y: -0.10, angle: 0.65, pitch: 0.07, scale: 0.84 },
+  { x: 0.28, y: -0.12, angle: 2.35, pitch: 0.16, scale: 0.82 },
+  { x: 0, y: -0.35, angle: 3.85, pitch: 0.10, scale: 0.62 },
 ];
 
 function schedule() {
   if (!frame && loaded && !document.hidden) frame = requestAnimationFrame(render);
 }
 function updateTarget() {
-  let active = 0;
-  sections.forEach((section, index) => {
-    if (section.getBoundingClientRect().top <= innerHeight / 3) active = index;
-  });
-  const view = views[active];
+  const anchors = sections.map(section => Math.max(0, section.getBoundingClientRect().top + scrollY - 80));
+  let index = 0;
+  while (index < anchors.length - 2 && scrollY >= anchors[index + 1]) index++;
+  const progress = THREE.MathUtils.clamp((scrollY - anchors[index]) / Math.max(1, anchors[index + 1] - anchors[index]), 0, 1);
+  const active = progress < 0.5 ? index : index + 1;
+  const eased = reducedMotion.matches ? (progress < 0.5 ? 0 : 1) : progress * progress * (3 - 2 * progress);
+  const from = views[index];
+  const to = views[index + 1];
+  const view = {};
+  for (const property of ['x', 'y', 'angle', 'pitch', 'scale']) {
+    view[property] = THREE.MathUtils.lerp(from[property], to[property], eased);
+  }
   const height = 2 * Math.tan(THREE.MathUtils.degToRad(camera.fov / 2)) * camera.position.z;
   const width = height * camera.aspect;
   const mobile = innerWidth <= 767;
   target.x = mobile ? 0 : view.x * width;
   target.y = (mobile ? -0.29 : view.y) * height;
   target.angle = view.angle;
+  target.pitch = view.pitch;
   target.scale = mobile ? Math.min(width * 0.9 / 4.6, 0.9) : Math.min(view.scale, width * 0.8 / 4.6);
   document.querySelectorAll('header nav a').forEach(link => {
     if (link.hash === '#' + sections[active].id) link.setAttribute('aria-current', 'location');
@@ -65,14 +73,14 @@ function render(time) {
   frame = 0;
   const dt = Math.min((time - lastTime) / 1000 || 0.016, 0.05);
   lastTime = time;
-  const blend = reducedMotion.matches ? 1 : 1 - Math.exp(-dt * 3);
+  const blend = reducedMotion.matches ? 1 : 1 - Math.exp(-dt * 7);
   rig.position.x = THREE.MathUtils.lerp(rig.position.x, target.x, blend);
   rig.position.y = THREE.MathUtils.lerp(rig.position.y, target.y, blend);
   rig.rotation.y = THREE.MathUtils.lerp(rig.rotation.y, target.angle, blend);
-  rig.rotation.x = 0.16;
+  rig.rotation.x = THREE.MathUtils.lerp(rig.rotation.x, target.pitch, blend);
   rig.scale.setScalar(THREE.MathUtils.lerp(rig.scale.x, target.scale, blend));
   renderer.render(scene, camera);
-  const remaining = Math.abs(rig.position.x - target.x) + Math.abs(rig.position.y - target.y) + Math.abs(rig.rotation.y - target.angle) + Math.abs(rig.scale.x - target.scale);
+  const remaining = Math.abs(rig.position.x - target.x) + Math.abs(rig.position.y - target.y) + Math.abs(rig.rotation.y - target.angle) + Math.abs(rig.scale.x - target.scale) + Math.abs(rig.rotation.x - target.pitch);
   if (remaining > 0.001) schedule();
 }
 
