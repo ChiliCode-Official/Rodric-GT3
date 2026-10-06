@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { GLTFLoader } from './assets/vendor/GLTFLoader.js';
+import { MeshoptDecoder } from './assets/vendor/meshopt_decoder.module.js';
 import { RoomEnvironment } from './assets/vendor/RoomEnvironment.js';
 
 const status = document.querySelector('.model-status');
@@ -33,7 +34,7 @@ let frame = 0;
 let lastTime = 0;
 const target = { x: 0, y: 0, angle: -0.65, pitch: 0.12, scale: 1 };
 const views = [
-  { x: 0, y: -0.20, angle: -0.65, pitch: 0.12, scale: 1.12 },
+  { x: 0, y: -0.30, angle: -0.65, pitch: 0.12, scale: 0.90 },
   { x: -0.27, y: -0.10, angle: 0.65, pitch: 0.07, scale: 0.84 },
   { x: 0.28, y: -0.12, angle: 2.35, pitch: 0.16, scale: 0.82 },
   { x: 0, y: -0.35, angle: 3.85, pitch: 0.10, scale: 0.62 },
@@ -59,7 +60,17 @@ function updateTarget() {
   const width = height * camera.aspect;
   const mobile = innerWidth <= 767;
   target.x = mobile ? 0 : view.x * width;
-  target.y = (mobile ? -0.29 : view.y) * height;
+  target.y = view.y * height;
+  if (mobile) {
+    let visibleSection = sections[0];
+    sections.forEach(section => {
+      if (section.getBoundingClientRect().top <= innerHeight / 3) visibleSection = section;
+    });
+    const content = visibleSection.querySelector('.des, .hero-profile');
+    const contentBottom = content.getBoundingClientRect().bottom;
+    const centerY = Math.max(innerHeight * 0.80, contentBottom + innerHeight * 0.16);
+    target.y = (0.5 - centerY / innerHeight) * height;
+  }
   target.angle = view.angle;
   target.pitch = view.pitch;
   target.scale = mobile ? Math.min(width * 0.9 / 4.6, 0.9) : Math.min(view.scale, width * 0.8 / 4.6);
@@ -84,7 +95,7 @@ function render(time) {
   if (remaining > 0.001) schedule();
 }
 
-new GLTFLoader().load('./assets/porsche_gt3_rs.glb', gltf => {
+new GLTFLoader().setMeshoptDecoder(MeshoptDecoder).load('./assets/porsche_gt3_rs.optimized.glb', gltf => {
   const car = gltf.scene;
   const box = new THREE.Box3().setFromObject(car);
   const size = box.getSize(new THREE.Vector3());

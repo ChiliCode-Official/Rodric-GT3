@@ -1,4 +1,4 @@
-# Rodric GT3 — Porsche 3D
+# Rodric GT3 — Portafolio de fotografía y diseño web
 
 Sitio estático para GitHub Pages. Conserva las cuatro secciones, tipografías y navegación fija del ejemplo `3D Realistic Bee`. La paleta combina blanco, grafito y rojo con el Porsche. El giro, la inclinación y el encuadre avanzan de forma continua con el desplazamiento; retroceden al subir. No requiere React, npm, backend ni compilación.
 
@@ -24,7 +24,8 @@ Archivos:
 - `index.html`: títulos, párrafos, redes y contacto.
 - `style.css`: diseño original y ajustes al final. Los colores están en `:root`.
 - `script.js`: escena y cuatro vistas en `views`. `angle` gira el auto, `pitch` ajusta la inclinación, `scale` cambia su tamaño y `x`/`y` su posición.
-- `assets/porsche_gt3_rs.glb`: modelo local de aproximadamente 18.4 MB.
+- `assets/porsche_gt3_rs.optimized.glb`: modelo servido de 3.04 MB, con Meshopt y texturas WebP de hasta 1024 px.
+- `assets/porsche_gt3_rs.glb`: original de 19.27 MB conservado como respaldo; no se descarga en la portada.
 - `assets/vendor/`: Three.js 0.160.1 y cargador locales.
 - `.nojekyll`: permite servir directamente los archivos estáticos.
 
@@ -39,4 +40,10 @@ El modelo y Three.js se sirven desde el propio repositorio. Las fuentes de la re
 Modelo: **Porsche GT3 RS**, por **Black Snow**, licencia **CC BY 4.0**. Fuente y atribución también incluidas en el pie de página:
 https://sketchfab.com/3d-models/porsche-gt3-rs-e738eae819c34d19a31dd066c45e0f3d
 
-Se ha adaptado la presentación y la animación; el archivo GLB se conserva sin modificar. Diseño de referencia: `3D Realistic Bee`, @CodeZenithAI. Sitio independiente, no afiliado a Porsche.
+Se ha adaptado la presentación y la animación. El GLB utilizado se optimizó con glTF Transform: deduplicación, unión de piezas, compresión Meshopt, cuantización y texturas WebP. Se conservó el original. No se simplificó la geometría. Diseño de referencia: `3D Realistic Bee`, @CodeZenithAI. Sitio independiente, no afiliado a Porsche.
+
+## Portafolio
+
+Los enlaces de Instagram, TikTok y perfil personal están al inicio en `.bio-links`. La sección `intro` presenta la fotografía y el proyecto Camilo Guerra; `description` presenta el servicio de páginas web y la certificación UX indicada por el propietario. Para actualizar el proyecto, edita el enlace `.project-link` en `index.html`. El contacto abre el correo del visitante.
+
+La optimización redujo la descarga del GLB de 19,270,544 a 3,038,400 bytes (84.2%) y los grupos de dibujo de 291 a 23. Esto reduce transferencia y trabajo de render; la duración real depende de la conexión y el dispositivo. Meshopt y su decodificador se sirven localmente.
