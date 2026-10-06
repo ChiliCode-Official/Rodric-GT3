@@ -47,3 +47,7 @@ Se ha adaptado la presentación y la animación. El GLB utilizado se optimizó c
 Los enlaces de Instagram, TikTok y perfil personal están al inicio en `.bio-links`. La sección `intro` presenta la fotografía y el proyecto Camilo Guerra; `description` presenta el servicio de páginas web y la certificación UX indicada por el propietario. Para actualizar el proyecto, edita el enlace `.project-link` en `index.html`. El contacto abre el correo del visitante.
 
 La optimización redujo la descarga del GLB de 19,270,544 a 3,038,400 bytes (84.2%) y los grupos de dibujo de 291 a 23. Esto reduce transferencia y trabajo de render; la duración real depende de la conexión y el dispositivo. Meshopt y su decodificador se sirven localmente.
+
+### Versión de carga rápida
+
+La portada usa `assets/porsche_gt3_rs.fast.glb` (aproximadamente 1.67 MB). La versión anterior de 3.04 MB se conserva. Se simplificó geometría con límite de error de 0.001 y se limitaron texturas a 512 px, reduciendo detalle fino a cambio de menor descarga y trabajo del navegador. El modelo y los módulos se precargan desde la cabecera. El render limita la densidad a 1 en móvil y 1.25 en escritorio.

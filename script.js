@@ -3,14 +3,19 @@ import { GLTFLoader } from './assets/vendor/GLTFLoader.js';
 import { MeshoptDecoder } from './assets/vendor/meshopt_decoder.module.js';
 import { RoomEnvironment } from './assets/vendor/RoomEnvironment.js';
 
+const modelRequest = fetch('./assets/porsche_gt3_rs.fast.glb').then(response => {
+  if (!response.ok) throw new Error(`GLB HTTP ${response.status}`);
+  return response.arrayBuffer();
+});
+modelRequest.catch(() => {});
 const status = document.querySelector('.model-status');
 const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
 const sections = [...document.querySelectorAll('main .section')];
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(35, innerWidth / innerHeight, 0.1, 100);
 camera.position.z = 10;
-const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: devicePixelRatio < 2, powerPreference: 'low-power' });
-renderer.setPixelRatio(Math.min(devicePixelRatio, 1.5));
+const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: devicePixelRatio < 2, powerPreference: 'default' });
+renderer.setPixelRatio(Math.min(devicePixelRatio, innerWidth <= 767 ? 1 : 1.25));
 renderer.setSize(innerWidth, innerHeight);
 renderer.setClearColor(0x000000, 0);
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
@@ -95,7 +100,10 @@ function render(time) {
   if (remaining > 0.001) schedule();
 }
 
-new GLTFLoader().setMeshoptDecoder(MeshoptDecoder).load('./assets/porsche_gt3_rs.optimized.glb', gltf => {
+modelRequest.then(buffer => {
+  status.textContent = 'Preparando vista 3D…';
+  return new GLTFLoader().setMeshoptDecoder(MeshoptDecoder).parseAsync(buffer, './assets/');
+}).then(gltf => {
   const car = gltf.scene;
   const box = new THREE.Box3().setFromObject(car);
   const size = box.getSize(new THREE.Vector3());
@@ -109,12 +117,13 @@ new GLTFLoader().setMeshoptDecoder(MeshoptDecoder).load('./assets/porsche_gt3_rs
   rig.position.set(target.x, target.y, 0);
   rig.rotation.y = target.angle;
   rig.scale.setScalar(target.scale);
+  rig.rotation.x = target.pitch;
+  renderer.render(scene, camera);
   status.hidden = true;
   document.querySelector('#container3D').dataset.state = 'ready';
+  document.querySelector('#container3D').dataset.readyMs = String(Math.round(performance.now()));
   schedule();
-}, event => {
-  if (event.total) status.textContent = `Cargando Porsche 3D · ${Math.round(event.loaded / event.total * 100)}%`;
-}, error => {
+}).catch(error => {
   status.textContent = 'No se pudo cargar el Porsche. Recarga para volver a intentarlo.';
   console.error('Porsche GLB:', error);
 });
