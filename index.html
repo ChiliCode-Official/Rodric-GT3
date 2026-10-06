@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#1b1b1b">
+  <meta name="description" content="Rodric GT3. Autos, carspotting y pasión por el Porsche 911 GT3 RS. Una experiencia en 3D.">
+  <title>Rodric GT3 — Porsche GT3 RS</title>
+  <link rel="stylesheet" href="./style.css">
+  <script type="importmap">{"imports":{"three":"./assets/vendor/three.module.js"}}</script>
+</head>
+<body>
+<a class="skip-link" href="#intro">Saltar al contenido</a>
+<header><div class="content-fit">
+  <a class="logo" href="#banner" aria-label="Rodric GT3, inicio">@RODRICGT3</a>
+  <nav aria-label="Principal"><ul>
+    <li><a href="#intro">Pasión</a></li>
+    <li><a href="#description">GT3 RS</a></li>
+    <li><a href="#contact">Contacto</a></li>
+  </ul></nav>
+</div></header>
+<main>
+  <section class="section" id="banner" aria-labelledby="hero-title"><div class="content-fit">
+    <h1 class="title" id="hero-title" data-before="PORSCHE GT3 RS">PORSCHE<br>GT3 RS</h1>
+    <a class="scroll-cue" href="#intro">DESLIZA PARA EXPLORAR <span>↓</span></a>
+  </div></section>
+  <section class="section" id="intro" aria-labelledby="intro-title"><div class="content-fit">
+    <div class="number" aria-hidden="true">01</div>
+    <div class="des"><h2 class="title" id="intro-title">Pasión sin límite.</h2>
+      <p>Hay autos que te llevan a un lugar. Otros hacen que quieras seguir conduciendo. Este espacio es para los segundos: diseño, carspotting y experiencias que se viven al volante.</p>
+      <a class="text-link" href="https://www.instagram.com/rodricgt3/" target="_blank" rel="noopener noreferrer">Sigue la ruta en Instagram ↗</a>
+    </div>
+  </div></section>
+  <section class="section" id="description" aria-labelledby="car-title"><div class="content-fit">
+    <div class="number" aria-hidden="true">02</div>
+    <div class="des"><h2 class="title" id="car-title">Hecho para la pista.</h2>
+      <p>Una silueta inconfundible. Un alerón que roba todas las miradas. El Porsche 911 GT3 RS lleva la estética del circuito a cada detalle: líneas tensas, presencia radical y una sola obsesión, conducir.</p>
+      <p class="eyebrow">PORSCHE / 911 / GT3 RS</p>
+    </div>
+  </div></section>
+  <section class="section" id="contact" aria-labelledby="contact-title"><div class="content-fit">
+    <div class="number" aria-hidden="true">03</div>
+    <div class="des"><h2 class="title" id="contact-title">Conectemos.</h2>
+      <table aria-label="Contacto y redes"><tbody>
+        <tr><th scope="row">Email</th><td><a href="mailto:glzcales@gmail.com">glzcales@gmail.com ↗</a></td></tr>
+        <tr><th scope="row">Instagram</th><td><a href="https://www.instagram.com/rodricgt3/" target="_blank" rel="noopener noreferrer">@rodricgt3 ↗</a></td></tr>
+        <tr><th scope="row">TikTok</th><td><a href="https://www.tiktok.com/@rodricgt3" target="_blank" rel="noopener noreferrer">@rodricgt3 ↗</a></td></tr>
+      </tbody></table>
+      <div class="sign">Rodric GT3</div>
+    </div>
+  </div></section>
+</main>
+<div id="container3D" aria-hidden="true"></div>
+<div class="model-status" role="status" aria-live="polite">Cargando Porsche 3D…</div>
+<footer>Modelo: <a href="https://sketchfab.com/3d-models/porsche-gt3-rs-e738eae819c34d19a31dd066c45e0f3d">Porsche GT3 RS por Black Snow</a> · <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>. Presentación y animación adaptadas. Sitio independiente.</footer>
+<noscript><p class="model-status">Activa JavaScript para ver el Porsche en 3D.</p></noscript>
+<script type="module">
+  import('./script.js').catch(() => { document.querySelector('.model-status').textContent = 'No se pudo iniciar el 3D. Recarga para volver a intentarlo.'; });
+</script>
+</body>
+</html>

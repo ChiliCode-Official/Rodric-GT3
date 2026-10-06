@@ -1,0 +1,270 @@
+@import url("https://fonts.cdnfonts.com/css/devil-breeze");
+@import url("https://fonts.cdnfonts.com/css/poppins");
+@import url("https://fonts.cdnfonts.com/css/bimbo");
+
+body {
+  margin: 0;
+  font-family: "Montserrat", sans-serif;
+  background-color: #1b1b1b;
+  color: #eef8ce;
+  font-family: "Poppins", sans-serif;
+  font-size: 14px;
+  background-image: url(/Images/bg.png),
+    repeating-linear-gradient(
+      to right,
+      transparent 0 500px,
+      #73814b33 500px 501px
+    );
+  background-size: 100%;
+}
+
+*::-webkit-scrollbar {
+  width: 0;
+}
+
+* {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  box-sizing: border-box;
+}
+.section {
+  width: 100%;
+  min-height: 100vh;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  scroll-margin-top: 5.5rem;
+}
+
+.content-fit {
+  width: min(1200px, 90vw);
+  margin: auto;
+  min-height: 100vh;
+  position: relative;
+  padding-block: 10em;
+}
+header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 200;
+  padding-block: 0.65rem 0.85rem;
+  border-bottom: 1px solid rgba(68, 80, 34, 0.55);
+  background: transparent;
+  -webkit-backdrop-filter: blur(18px) saturate(1.15);
+          backdrop-filter: blur(18px) saturate(1.15);
+}
+
+header .content-fit {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1.5rem;
+  min-height: unset !important;
+  padding-block: unset !important;
+  padding-inline: clamp(1rem, 4vw, 2rem);
+}
+
+header .logo {
+  font-family: "devil breeze", "Poppins", sans-serif;
+  font-size: clamp(1.15rem, 2.8vw, 1.65rem);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  line-height: 1;
+  background: linear-gradient(
+    120deg,
+    #d1ff48 0%,
+    #f4ffd0 42%,
+    #c8d896 100%
+  );
+  -webkit-background-clip: text;
+          background-clip: text;
+  color: transparent;
+  filter: drop-shadow(0 0 14px rgba(209, 255, 72, 0.22));
+}
+
+header .content-fit nav ul {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+header nav a {
+  display: inline-block;
+  font-family: "Poppins", sans-serif;
+  font-size: clamp(0.68rem, 1.4vw, 0.78rem);
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: rgba(238, 248, 206, 0.88);
+  padding: 0.45rem 0.95rem;
+  border-radius: 999px;
+  border: 1px solid rgba(115, 129, 75, 0.45);
+  background: rgba(115, 129, 75, 0.14);
+  cursor: pointer;
+  transition: color 0.22s ease, background 0.22s ease, border-color 0.22s ease,
+    box-shadow 0.22s ease, transform 0.22s ease;
+}
+
+header nav a:hover {
+  color: #1b1b1b;
+  background: #d1ff48;
+  border-color: #d1ff48;
+  box-shadow: 0 0 22px rgba(209, 255, 72, 0.28);
+  transform: translateY(-1px);
+}
+
+header nav a:active {
+  transform: translateY(0);
+}
+
+header nav a:focus-visible {
+  outline: 2px solid #d1ff48;
+  outline-offset: 3px;
+}
+
+#banner .title {
+  color: #d1ff48;
+  font-size: 11em;
+  font-family: "devil breeze";
+  font-weight: bold;
+  position: relative;
+  overflow: visible;
+  text-align: center;
+}
+#banner .title::before {
+  content: attr(data-before);
+  position: absolute;
+  z-index: -1;
+  color: oklch(0.78 0.17 80.01 / 0.19);
+  -webkit-mask: linear-gradient(
+    to bottom,
+    #000 -80%,
+    oklch(0 0 0/0),
+    #000,
+    oklch(0 0 0/0) 200%
+  );
+          mask: linear-gradient(
+    to bottom,
+    #000 -80%,
+    oklch(0 0 0/0),
+    #000,
+    oklch(0 0 0/0) 200%
+  );
+  transform: scaleY(-1) translateY(-0.44lh);
+}
+.section .decorate {
+  position: fixed;
+  z-index: -100;
+  pointer-events: none;
+}
+#intro .content-fit {
+  display: flex;
+  gap: 30%;
+  justify-content: space-between;
+  align-items: center;
+}
+.section .number {
+  font-family: "devil breeze";
+  font-size: 15em;
+  font-weight: bold;
+}
+.section .content-fit .title {
+  font-family: "devil breeze";
+  font-size: 5em;
+  font-weight: bold;
+}
+#description .content-fit {
+  padding-right: 30%;
+}
+#description .number {
+  font-size: 5em;
+}
+#description .title {
+  font-size: 7em;
+  font-weight: 500;
+}
+#contact .content-fit {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  text-align: center;
+}
+#contact table {
+  width: min(800px, 90vw);
+  padding-top: 2em;
+  font-size: 2em;
+  margin: auto;
+}
+#contact table td {
+  padding-block: 0.5em;
+  border-bottom: 1px dashed #445022;
+}
+#contact table td:nth-child(1) {
+  text-align: left;
+  font-weight: 500;
+}
+#contact table td:nth-child(2) {
+  text-align: right;
+  font-weight: 200;
+}
+#contact .sign {
+  font-size: 10em;
+}
+#container3D {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  pointer-events: none;
+}
+@media screen and (max-width: 1023px) {
+  #banner .title {
+    font-size: 5em;
+  }
+  #intro .content-fit {
+    flex-direction: column;
+  }
+}
+@media screen and (max-width: 767px) {
+  header .content-fit {
+    gap: 0.75rem;
+  }
+  header nav ul {
+    gap: 0.35rem;
+  }
+  header nav a {
+    padding: 0.38rem 0.65rem;
+    letter-spacing: 0.05em;
+  }
+  #banner .title {
+    font-size: 3em;
+  }
+  #intro .content-fit {
+    flex-direction: column;
+  }
+  .section .number {
+    font-size: 5em;
+  }
+  .section .content-fit .title {
+    font-size: 2em;
+  }
+  #description .content-fit {
+    padding-right: 0;
+  }
+  #contact table {
+    font-size: 1em;
+  }
+  #contact .sign {
+    font-size: 2em;
+  }
+  #container3D {
+    position: sticky;
+  }
+}

@@ -1,0 +1,1 @@
+@media (pointer:fine){.framer--carousel[data-show-scrollbar="false"]::-webkit-scrollbar{display:none;-webkit-appearance:none;width:0;height:0}.framer--carousel[data-show-scrollbar="false"]::-webkit-scrollbar-thumb{display:none}.framer--carousel[data-show-scrollbar="false"]{scrollbar-width:none;scrollbar-height:none}}
