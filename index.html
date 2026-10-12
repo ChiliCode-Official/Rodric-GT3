@@ -9,6 +9,7 @@
   <script type="importmap">{"imports":{"three":"./assets/vendor/three.module.js"}}</script>
   <link rel="preload" href="./assets/porsche_gt3_rs.fast.glb" as="fetch" crossorigin>
   <link rel="modulepreload" href="./script.js">
+  <link rel="modulepreload" href="./LiquidChrome.js">
   <link rel="modulepreload" href="./assets/vendor/GLTFLoader.js">
   <link rel="modulepreload" href="./assets/vendor/BufferGeometryUtils.js">
   <link rel="modulepreload" href="./assets/vendor/RoomEnvironment.js">
@@ -31,7 +32,7 @@
   <section class="section" id="banner" aria-labelledby="hero-title"><div class="content-fit">
     <div class="hero-profile">
       <p class="eyebrow">FOTOGRAFÍA AUTOMOTRIZ · DISEÑO WEB</p>
-      <h1 class="title" id="hero-title" data-before="RODRIC GT3">RODRIC<br>GT3</h1>
+      <h1 class="title" id="hero-title" data-tech-text="RODRIC|GT3" data-before="RODRIC GT3">RODRIC<br>GT3</h1>
       <p class="hero-copy">Fotografío autos. Diseño experiencias digitales.<br>Mi favorito: el Porsche 911 GT3 RS.</p>
       <div class="bio-links" aria-label="Mis redes y servicios">
         <a href="https://www.instagram.com/rodricgt3/" target="_blank" rel="noopener noreferrer">Instagram ↗</a>
@@ -122,6 +123,9 @@
 <div class="model-status" role="status" aria-live="polite">Cargando Porsche 3D…</div>
 <footer>Modelo: <a href="https://sketchfab.com/3d-models/porsche-gt3-rs-e738eae819c34d19a31dd066c45e0f3d">Porsche GT3 RS por Black Snow</a> · <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>. Presentación y animación adaptadas. Sitio independiente.</footer>
 <noscript><p class="model-status">Activa JavaScript para ver el Porsche en 3D.</p></noscript>
+<script type="module" src="./TechText.js"></script>
+<script type="module" src="./SplitText.js"></script>
+<script type="module" src="./BlurText.js"></script>
 <script type="module">
   import('./script.js').catch(() => { document.querySelector('.model-status').textContent = 'No se pudo iniciar el 3D. Recarga para volver a intentarlo.'; });
 </script>

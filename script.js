@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { createLiquidChrome } from './LiquidChrome.js';
 import { GLTFLoader } from './assets/vendor/GLTFLoader.js';
 import { MeshoptDecoder } from './assets/vendor/meshopt_decoder.module.js';
 import { RoomEnvironment } from './assets/vendor/RoomEnvironment.js';
@@ -11,6 +12,11 @@ modelRequest.catch(() => {});
 const status = document.querySelector('.model-status');
 const sections = [...document.querySelectorAll('main .section')];
 const scene = new THREE.Scene();
+const liquidChrome = createLiquidChrome(THREE, {
+  color: '#ffffff', speed: 0.2, amplitude: 0.3,
+  detail: 4, thickness: 1, interactive: true,
+});
+scene.add(liquidChrome.mesh);
 const camera = new THREE.PerspectiveCamera(35, innerWidth / innerHeight, 0.1, 100);
 camera.position.z = 10;
 const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: devicePixelRatio < 2, powerPreference: 'default' });
@@ -106,6 +112,7 @@ function render(time) {
   rig.rotation.x = THREE.MathUtils.lerp(rig.rotation.x, target.pitch, blend);
   rig.scale.setScalar(THREE.MathUtils.lerp(rig.scale.x, target.scale, blend));
   motionTime += dt;
+  liquidChrome.update(motionTime);
   const turn = Math.sin(motionTime * 0.55) * 0.32;
   turntable.rotation.y = THREE.MathUtils.lerp(turntable.rotation.y, turn, blend);
   renderer.render(scene, camera);
@@ -142,6 +149,7 @@ modelRequest.then(buffer => {
 
 addEventListener('scroll', updateTarget, { passive: true });
 addEventListener('resize', () => {
+  liquidChrome.resize();
   camera.aspect = innerWidth / innerHeight;
   camera.updateProjectionMatrix();
   renderer.setSize(innerWidth, innerHeight);

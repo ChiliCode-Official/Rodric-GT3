@@ -57,3 +57,7 @@ La portada usa `assets/porsche_gt3_rs.fast.glb` (aproximadamente 1.67 MB). La ve
 El Porsche tiene giro suave de exhibición a 30 FPS, además de las transiciones al hacer scroll. La animación permanece activa automáticamente mientras la pestaña está visible, por decisión del propietario. La animación se suspende al ocultar la pestaña.
 
 La playlist está integrada entre «Sobre mí» y «Diseño web» y tiene su propio encuadre en la animación 3D.
+
+### Fondo Liquid Chrome
+
+`LiquidChrome.js` implementa una adaptación nativa del efecto de cromo líquido, compartiendo el renderer y el límite de 30 FPS del Porsche. Configuración en `script.js`: blanco, velocidad 0.2, amplitud 0.3, detalle 4 y grosor 1. El contraste se atenúa en el centro para mantener los textos legibles. La reacción al puntero es leve, no captura clics y no se activa con gestos táctiles. No requiere React, una segunda biblioteca gráfica ni un segundo contexto WebGL.

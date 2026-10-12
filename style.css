@@ -405,3 +405,43 @@ header nav a:hover, header nav a[aria-current="location"] { color: #fff; backgro
 #playlist .soundtrack-copy > p { font-size: .85rem; }
 #playlist .soundtrack-player { background: #151619; }
 @media (max-width: 767px) { #playlist { padding-bottom: 45vh; } }
+
+/* Superficies tranquilas sobre el cromo líquido. */
+body { background-image: none; }
+#banner .title::before { opacity: .4; }
+#intro .des, #description .des { position: relative; z-index: 101; }
+header { background: #151619e0; }
+.bio-links a { background: #1b1d22f5; }
+.bio-links .bio-primary { background: #c72b36; }
+.soundtrack-copy, .project-link { backdrop-filter: blur(8px); }
+
+/* TechText: título semántico con revelado y detalles de baja intensidad. */
+#banner .title.tech-text { width: fit-content; max-width: 100%; margin-inline: auto; padding: .05em .18em; }
+#banner .title.tech-text::before { content: none; }
+.tech-line { display: block; white-space: nowrap; }
+.tech-letter { display: inline-block; animation: tech-reveal .8s cubic-bezier(.22,1,.36,1) both; animation-delay: var(--letter-delay); }
+.tech-ornament { position: absolute; inset: 0; pointer-events: none; }
+.tech-ornament svg { width: 100%; height: 100%; fill: none; stroke: #bfc3cb; stroke-width: 1; opacity: .22; }
+.tech-speck { position: absolute; width: 2px; height: 2px; background: #eef0f5; border-radius: 50%; opacity: 0; }
+.tech-visible .tech-speck { animation: tech-spark 6s ease-in-out infinite; animation-delay: var(--speck-delay); }
+.tech-paused .tech-speck { animation-play-state: paused; }
+@keyframes tech-reveal { from { opacity: .1; transform: translateY(.12em); filter: blur(4px); } to { opacity: 1; transform: translateY(0); filter: blur(0); } }
+@keyframes tech-spark { 0%, 65%, 100% { opacity: 0; } 76% { opacity: .3; } 85% { opacity: .08; } }
+@media (prefers-reduced-motion: reduce) { .tech-letter { animation: none; } .tech-visible .tech-speck { animation: none; } }
+
+/* SplitText: revelado por palabras completas para conservar saltos naturales. */
+.split-word { display: inline-block; white-space: nowrap; }
+.split-char { display: inline-block; }
+.split-visible .split-char { animation: split-reveal var(--split-duration) cubic-bezier(.215,.61,.355,1) both; animation-delay: var(--split-delay); }
+@keyframes split-reveal { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
+@media (prefers-reduced-motion: reduce) { .split-visible .split-char { animation: none; } }
+.split-text:not(.split-visible) .split-char { opacity: 0; transform: translateY(40px); }
+@media (prefers-reduced-motion: reduce) { .split-text:not(.split-visible) .split-char { opacity: 1; transform: none; } }
+
+/* BlurText: descripciones por palabras y desenfoque ligero. */
+.animation-sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0; }
+.blur-word { display: inline-block; }
+.blur-text:not(.blur-visible) .blur-word { opacity: 0; }
+.blur-visible .blur-word { animation: blur-reveal .65s cubic-bezier(.22,1,.36,1) both; animation-delay: var(--blur-delay); }
+@keyframes blur-reveal { from { opacity: 0; filter: blur(5px); transform: translateY(var(--blur-offset)); } to { opacity: 1; filter: blur(0); transform: translateY(0); } }
+@media (prefers-reduced-motion: reduce) { .blur-text:not(.blur-visible) .blur-word { opacity: 1; } .blur-visible .blur-word { animation: none; } }
