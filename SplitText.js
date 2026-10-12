@@ -1,8 +1,6 @@
 /** SplitText nativo: conserva palabras y accesibilidad del encabezado. */
 export function mountSplitText(element, { delay = 100, duration = 0.6, threshold = 0.1, rootMargin = '0px 0px -100px 0px', onLetterAnimationComplete } = {}) {
   if (!element || element.dataset.splitMounted) return;
-  const reduce = matchMedia('(prefers-reduced-motion: reduce)');
-  if (reduce.matches) return;
   const original = [...element.childNodes];
   const label = original.map(node => node.nodeName === 'BR' ? ' ' : node.textContent).join('').replace(/\s+/g, ' ').trim();
   element.setAttribute('aria-label', label);
@@ -39,14 +37,10 @@ export function mountSplitText(element, { delay = 100, duration = 0.6, threshold
   glyphs.at(-1)?.addEventListener('animationend', finish, { once: true });
   const observer = new IntersectionObserver(entries => {
     for (const entry of entries) {
-      if (!entry.isIntersecting) continue;
-      element.classList.add('split-visible');
-      observer.unobserve(element);
+      element.classList.toggle('split-visible', entry.isIntersecting);
     }
   }, { threshold, rootMargin });
   observer.observe(element);
-  reduce.addEventListener('change', event => {
-    if (event.matches) { element.classList.add('split-visible'); observer.disconnect(); }
-  });
+
 }
 for (const element of document.querySelectorAll('h2, .pricing-plan')) mountSplitText(element);

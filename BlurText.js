@@ -1,8 +1,6 @@
 /** BlurText nativo: entrada por palabras, sin dependencias. */
 export function mountBlurText(element, { delay = 150, direction = 'top', onAnimationComplete } = {}) {
   if (!element || element.dataset.blurMounted || element.children.length) return;
-  const reduce = matchMedia('(prefers-reduced-motion: reduce)');
-  if (reduce.matches) return;
   const text = element.textContent.trim();
   if (!text) return;
   const fragment = document.createDocumentFragment();
@@ -30,15 +28,11 @@ export function mountBlurText(element, { delay = 150, direction = 'top', onAnima
   }, { once: true });
   const observer = new IntersectionObserver(entries => {
     for (const entry of entries) {
-      if (!entry.isIntersecting) continue;
-      element.classList.add('blur-visible');
-      observer.unobserve(element);
+      element.classList.toggle('blur-visible', entry.isIntersecting);
     }
   }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
   observer.observe(element);
-  reduce.addEventListener('change', event => {
-    if (event.matches) { element.classList.add('blur-visible'); observer.disconnect(); }
-  });
+
 }
 for (const element of document.querySelectorAll('.des > p:not(.eyebrow):not(.ux-credential), .soundtrack-copy > p:not(.eyebrow), .pricing-heading > p:not(.eyebrow)')) {
   mountBlurText(element);
