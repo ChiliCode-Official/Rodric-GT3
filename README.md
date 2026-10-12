@@ -54,4 +54,6 @@ La portada usa `assets/porsche_gt3_rs.fast.glb` (aproximadamente 1.67 MB). La ve
 
 ### Animación visible
 
-El Porsche tiene giro suave de exhibición a 30 FPS, además de las transiciones al hacer scroll. El botón «Pausar animación / Activar animación» controla ambos movimientos. La preferencia de movimiento reducido del sistema se respeta inicialmente; el visitante puede activar la animación con el botón. La animación se suspende al ocultar la pestaña.
+El Porsche tiene giro suave de exhibición a 30 FPS, además de las transiciones al hacer scroll. La animación permanece activa automáticamente mientras la pestaña está visible, por decisión del propietario. La animación se suspende al ocultar la pestaña.
+
+La playlist está integrada entre «Sobre mí» y «Diseño web» y tiene su propio encuadre en la animación 3D.

@@ -9,7 +9,6 @@ const modelRequest = fetch('./assets/porsche_gt3_rs.fast.glb').then(response => 
 });
 modelRequest.catch(() => {});
 const status = document.querySelector('.model-status');
-const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
 const sections = [...document.querySelectorAll('main .section')];
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(35, innerWidth / innerHeight, 0.1, 100);
@@ -36,20 +35,8 @@ const rig = new THREE.Group();
 const turntable = new THREE.Group();
 rig.add(turntable);
 scene.add(rig);
-const motionButton = document.querySelector('.motion-toggle');
-let motionEnabled = !reducedMotion.matches;
 let motionTime = 0;
 let lastDrawTime = 0;
-function updateMotionButton() {
-  motionButton.setAttribute('aria-pressed', String(motionEnabled));
-  motionButton.textContent = motionEnabled ? 'Pausar animación' : 'Activar animación';
-}
-updateMotionButton();
-motionButton.addEventListener('click', () => {
-  motionEnabled = !motionEnabled;
-  updateMotionButton();
-  schedule();
-});
 let loaded = false;
 let frame = 0;
 let lastTime = 0;
@@ -57,6 +44,7 @@ const target = { x: 0, y: 0, angle: -0.65, pitch: 0.12, scale: 1 };
 const views = [
   { x: 0, y: -0.30, angle: -0.65, pitch: 0.12, scale: 0.90 },
   { x: -0.27, y: -0.10, angle: 0.65, pitch: 0.07, scale: 0.84 },
+  { x: -0.27, y: -0.30, angle: 1.45, pitch: 0.12, scale: 0.66 },
   { x: 0.28, y: -0.12, angle: 2.35, pitch: 0.16, scale: 0.82 },
   { x: 0, y: -0.35, angle: 3.85, pitch: 0.10, scale: 0.62 },
 ];
@@ -70,7 +58,7 @@ function updateTarget() {
   while (index < anchors.length - 2 && scrollY >= anchors[index + 1]) index++;
   const progress = THREE.MathUtils.clamp((scrollY - anchors[index]) / Math.max(1, anchors[index + 1] - anchors[index]), 0, 1);
   const active = progress < 0.5 ? index : index + 1;
-  const eased = !motionEnabled ? (progress < 0.5 ? 0 : 1) : progress * progress * (3 - 2 * progress);
+  const eased = progress * progress * (3 - 2 * progress);
   const from = views[index];
   const to = views[index + 1];
   const view = {};
@@ -103,22 +91,21 @@ function updateTarget() {
 }
 function render(time) {
   frame = 0;
-  if (motionEnabled && time - lastDrawTime < 1000 / 30) { schedule(); return; }
+  if (time - lastDrawTime < 1000 / 30) { schedule(); return; }
   lastDrawTime = time;
   const dt = Math.min((time - lastTime) / 1000 || 0.016, 0.05);
   lastTime = time;
-  const blend = !motionEnabled ? 1 : 1 - Math.exp(-dt * 4);
+  const blend = 1 - Math.exp(-dt * 4);
   rig.position.x = THREE.MathUtils.lerp(rig.position.x, target.x, blend);
   rig.position.y = THREE.MathUtils.lerp(rig.position.y, target.y, blend);
   rig.rotation.y = THREE.MathUtils.lerp(rig.rotation.y, target.angle, blend);
   rig.rotation.x = THREE.MathUtils.lerp(rig.rotation.x, target.pitch, blend);
   rig.scale.setScalar(THREE.MathUtils.lerp(rig.scale.x, target.scale, blend));
-  if (motionEnabled) motionTime += dt;
-  const turn = motionEnabled ? Math.sin(motionTime * 0.55) * 0.32 : 0;
+  motionTime += dt;
+  const turn = Math.sin(motionTime * 0.55) * 0.32;
   turntable.rotation.y = THREE.MathUtils.lerp(turntable.rotation.y, turn, blend);
   renderer.render(scene, camera);
-  const remaining = Math.abs(rig.position.x - target.x) + Math.abs(rig.position.y - target.y) + Math.abs(rig.rotation.y - target.angle) + Math.abs(rig.scale.x - target.scale) + Math.abs(rig.rotation.x - target.pitch);
-  if (motionEnabled || remaining > 0.001 || Math.abs(turntable.rotation.y) > 0.001) schedule();
+  schedule();
 }
 
 modelRequest.then(buffer => {
@@ -136,7 +123,7 @@ modelRequest.then(buffer => {
   loaded = true;
   updateTarget();
   rig.position.set(target.x, target.y, 0);
-  rig.rotation.y = target.angle - (motionEnabled ? 0.45 : 0);
+  rig.rotation.y = target.angle - 0.45;
   rig.scale.setScalar(target.scale);
   rig.rotation.x = target.pitch;
   renderer.render(scene, camera);
@@ -154,11 +141,6 @@ addEventListener('resize', () => {
   camera.aspect = innerWidth / innerHeight;
   camera.updateProjectionMatrix();
   renderer.setSize(innerWidth, innerHeight);
-  updateTarget();
-});
-reducedMotion.addEventListener('change', () => {
-  motionEnabled = !reducedMotion.matches;
-  updateMotionButton();
   updateTarget();
 });
 document.addEventListener('visibilitychange', () => {
