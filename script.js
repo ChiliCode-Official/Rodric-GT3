@@ -82,7 +82,11 @@ function updateTarget() {
   }
   target.angle = view.angle;
   target.pitch = view.pitch;
-  target.scale = mobile ? Math.min(width * 0.9 / 4.6, 0.9) : Math.min(view.scale, width * 0.8 / 4.6);
+  const desktopBoost = innerWidth >= 1024 ? 1.3 : 1;
+  const availableWidth = width * Math.min(0.9, (0.5 - Math.abs(view.x)) * 2);
+  target.scale = mobile
+    ? Math.min(width * 0.9 / 4.6, 0.9)
+    : Math.min(view.scale * desktopBoost, availableWidth / 4.6);
   document.querySelectorAll('header nav a').forEach(link => {
     if (link.hash === '#' + sections[active].id) link.setAttribute('aria-current', 'location');
     else link.removeAttribute('aria-current');
