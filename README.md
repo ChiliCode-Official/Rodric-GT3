@@ -51,3 +51,7 @@ La optimización redujo la descarga del GLB de 19,270,544 a 3,038,400 bytes (84.
 ### Versión de carga rápida
 
 La portada usa `assets/porsche_gt3_rs.fast.glb` (aproximadamente 1.67 MB). La versión anterior de 3.04 MB se conserva. Se simplificó geometría con límite de error de 0.001 y se limitaron texturas a 512 px, reduciendo detalle fino a cambio de menor descarga y trabajo del navegador. El modelo y los módulos se precargan desde la cabecera. El render limita la densidad a 1 en móvil y 1.25 en escritorio.
+
+### Animación visible
+
+El Porsche tiene giro suave de exhibición a 30 FPS, además de las transiciones al hacer scroll. El botón «Pausar animación / Activar animación» controla ambos movimientos. La preferencia de movimiento reducido del sistema se respeta inicialmente; el visitante puede activar la animación con el botón. La animación se suspende al ocultar la pestaña.

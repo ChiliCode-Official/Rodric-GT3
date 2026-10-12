@@ -33,7 +33,23 @@ key.position.set(4, 6, 8);
 scene.add(key);
 
 const rig = new THREE.Group();
+const turntable = new THREE.Group();
+rig.add(turntable);
 scene.add(rig);
+const motionButton = document.querySelector('.motion-toggle');
+let motionEnabled = !reducedMotion.matches;
+let motionTime = 0;
+let lastDrawTime = 0;
+function updateMotionButton() {
+  motionButton.setAttribute('aria-pressed', String(motionEnabled));
+  motionButton.textContent = motionEnabled ? 'Pausar animación' : 'Activar animación';
+}
+updateMotionButton();
+motionButton.addEventListener('click', () => {
+  motionEnabled = !motionEnabled;
+  updateMotionButton();
+  schedule();
+});
 let loaded = false;
 let frame = 0;
 let lastTime = 0;
@@ -54,7 +70,7 @@ function updateTarget() {
   while (index < anchors.length - 2 && scrollY >= anchors[index + 1]) index++;
   const progress = THREE.MathUtils.clamp((scrollY - anchors[index]) / Math.max(1, anchors[index + 1] - anchors[index]), 0, 1);
   const active = progress < 0.5 ? index : index + 1;
-  const eased = reducedMotion.matches ? (progress < 0.5 ? 0 : 1) : progress * progress * (3 - 2 * progress);
+  const eased = !motionEnabled ? (progress < 0.5 ? 0 : 1) : progress * progress * (3 - 2 * progress);
   const from = views[index];
   const to = views[index + 1];
   const view = {};
@@ -87,17 +103,22 @@ function updateTarget() {
 }
 function render(time) {
   frame = 0;
+  if (motionEnabled && time - lastDrawTime < 1000 / 30) { schedule(); return; }
+  lastDrawTime = time;
   const dt = Math.min((time - lastTime) / 1000 || 0.016, 0.05);
   lastTime = time;
-  const blend = reducedMotion.matches ? 1 : 1 - Math.exp(-dt * 7);
+  const blend = !motionEnabled ? 1 : 1 - Math.exp(-dt * 4);
   rig.position.x = THREE.MathUtils.lerp(rig.position.x, target.x, blend);
   rig.position.y = THREE.MathUtils.lerp(rig.position.y, target.y, blend);
   rig.rotation.y = THREE.MathUtils.lerp(rig.rotation.y, target.angle, blend);
   rig.rotation.x = THREE.MathUtils.lerp(rig.rotation.x, target.pitch, blend);
   rig.scale.setScalar(THREE.MathUtils.lerp(rig.scale.x, target.scale, blend));
+  if (motionEnabled) motionTime += dt;
+  const turn = motionEnabled ? Math.sin(motionTime * 0.55) * 0.32 : 0;
+  turntable.rotation.y = THREE.MathUtils.lerp(turntable.rotation.y, turn, blend);
   renderer.render(scene, camera);
   const remaining = Math.abs(rig.position.x - target.x) + Math.abs(rig.position.y - target.y) + Math.abs(rig.rotation.y - target.angle) + Math.abs(rig.scale.x - target.scale) + Math.abs(rig.rotation.x - target.pitch);
-  if (remaining > 0.001) schedule();
+  if (motionEnabled || remaining > 0.001 || Math.abs(turntable.rotation.y) > 0.001) schedule();
 }
 
 modelRequest.then(buffer => {
@@ -111,11 +132,11 @@ modelRequest.then(buffer => {
   const scale = 4.6 / Math.max(size.x, size.y, size.z);
   car.scale.multiplyScalar(scale);
   car.position.copy(center).multiplyScalar(-scale);
-  rig.add(car);
+  turntable.add(car);
   loaded = true;
   updateTarget();
   rig.position.set(target.x, target.y, 0);
-  rig.rotation.y = target.angle;
+  rig.rotation.y = target.angle - (motionEnabled ? 0.45 : 0);
   rig.scale.setScalar(target.scale);
   rig.rotation.x = target.pitch;
   renderer.render(scene, camera);
@@ -135,7 +156,11 @@ addEventListener('resize', () => {
   renderer.setSize(innerWidth, innerHeight);
   updateTarget();
 });
-reducedMotion.addEventListener('change', updateTarget);
+reducedMotion.addEventListener('change', () => {
+  motionEnabled = !reducedMotion.matches;
+  updateMotionButton();
+  updateTarget();
+});
 document.addEventListener('visibilitychange', () => {
   if (document.hidden) { cancelAnimationFrame(frame); frame = 0; }
   else { lastTime = performance.now(); schedule(); }
